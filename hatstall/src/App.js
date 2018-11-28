@@ -1,61 +1,54 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Navbar, NavbarBrand, NavDropdown, Nav, NavItem, MenuItem } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom'
-import { BrowserRouter, Route, Link } from 'react-router-dom'
 
-function Profiles() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
+import { NavLink, BrowserRouter, Route, Link } from 'react-router-dom'
+
+// Custom components
+import { SearchProfiles } from './custom_components/SearchProfiles'
+import { Main } from './custom_components/Main'
+import { Organizations } from './custom_components/Organizations'
+import { About } from './custom_components/About'
+import { ProfilesList } from './custom_components/ProfilesList'
+import { Profile } from './custom_components/Profile'
+
 
 class App extends Component {
   render() {
     return (
       <BrowserRouter>
         <div className="App">
-
           <Navbar>
             <Navbar.Header>
               <Navbar.Brand>
-                <a href="#home">Hatstall</a>
+                <a href="/">Hatstall</a>
               </Navbar.Brand>
             </Navbar.Header>
             <Nav>
               <NavItem>
                 <NavLink eventKey={1} to="/profiles">
                   Profiles
-              </NavLink>
+                </NavLink>
               </NavItem>
-              <NavItem eventKey={2} href="#/Organizations">
-                Organizations
+              <NavItem>
+                <NavLink eventKey={1} to="/organizations">
+                  Organizations
+                </NavLink>
               </NavItem>
-              <NavItem eventKey={2} href="#/About">
-                About
+              <NavItem>
+                <NavLink eventKey={1} to="/about">
+                  About
+                </NavLink>
               </NavItem>
             </Nav>
           </Navbar>
 
-          <Route path="/profiles" component={Profiles} />
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-          </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-          </a>
-          </header>
-
+          <Route exact path="/profiles" component={SearchProfiles} />
+          <Route path="/profiles/list" component={ProfilesList} />
+          <Route path="/profile/:profileId" component={Profile}/>
+          <Route path="/organizations" component={Organizations} />
+          <Route exact path="/" component={Main} />
+          <Route path="/about" component={About} />
         </div>
       </BrowserRouter >
     );
