@@ -88,7 +88,7 @@ class ProfilesList extends Component {
                                         <td>
                                             <input type="checkbox" name="uuid" value="{uid.profile.uuid}}" />
                                         </td>
-                                        <td><a href="{uid.profile.uuid}">{uid.profile.name}</a></td>
+                                        <td><a href={'/profile/' + uid.profile.uuid}>{uid.profile.name}</a></td>
                                         <td>{uid.profile.email}</td>
                                         <td>
                                             {uid.profile.enrollment}
@@ -105,7 +105,7 @@ class ProfilesList extends Component {
                 </Col>
             )
         } else {
-            return <p className="text-center">Loading identities...</p>
+            return <h3 className="text-center">Loading identities...</h3>
         }
     }
 }

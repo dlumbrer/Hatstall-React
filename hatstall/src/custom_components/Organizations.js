@@ -5,6 +5,7 @@ class Organizations extends Component {
     constructor(props) {
         super(props)
         this.state = { orgs: [] }
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentWillMount() {
@@ -16,6 +17,24 @@ class Organizations extends Component {
             .then((orgs) => {
                 this.setState({ orgs: orgs })
             })
+    }
+
+    handleSubmit(event) {
+        let self = this 
+        event.preventDefault();
+        const data = new FormData(event.target);
+
+        fetch('http://localhost:8000/identities/hatstall/organizations?format=json&username=admin&password=admin', {
+            method: 'POST',
+            body: data,
+        }).then((response) => {
+            console.log(response)
+            return response.json()
+        })
+        .then((orgs) => {
+            console.log(self)
+            self.setState({ orgs: orgs })
+        })
     }
 
     render() {
@@ -33,17 +52,17 @@ class Organizations extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                            {this.state.orgs.map(org =>
-                                <tr>
-                                    <td>{org.name}</td>
-                                </tr>
-                            )}
+                                {this.state.orgs.map(org =>
+                                    <tr>
+                                        <td>{org.name}</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </Table>
                     </Col>
 
                     <Col sm={6}>
-                        <Form horizontal id="addOrg" action="http://localhost:8000/identities/hatstall/organizations?username=admin&password=admin" method="POST">
+                        <Form horizontal id="addOrg" onSubmit={this.handleSubmit}>
                             <button id="closeAddOrg" type="button" class="close" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -70,7 +89,7 @@ class Organizations extends Component {
                 </Row>
             )
         } else {
-            return <p className="text-center">Loading organizations...</p>
+            return <h3 className="text-center">Loading organizations...</h3>
         }
 
     };
