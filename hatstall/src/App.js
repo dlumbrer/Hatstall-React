@@ -9,7 +9,7 @@ import SearchProfiles from './custom_components/SearchProfiles'
 import { Main } from './custom_components/Main'
 import Organizations from './custom_components/Organizations'
 import { About } from './custom_components/About'
-import Profile from './custom_components/Profile'
+import Profile from './custom_components/Profile_new'
 
 
 class App extends Component {

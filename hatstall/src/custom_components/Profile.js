@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col } from 'react-bootstrap';
+import { Col, InputGroup, FormControl } from 'react-bootstrap';
 
 class Profile extends Component {
     constructor(props) {
@@ -41,6 +41,12 @@ class Profile extends Component {
                                             <label for="profileBot" class="col-sm-2 col-form-label"><b>Bot?</b></label>
                                             <input name="bot" type="checkbox" class="col-sm-10 form-control-plaintext" style={{ height: "20px", marginTop: "8px" }} id="profileBot" value={this.state.profile.profile.is_bot} disabled />
                                         </div>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Checkbox aria-label="Checkbox for following text input" />
+                                            </InputGroup.Prepend>
+                                            <FormControl aria-label="Text input with checkbox" />
+                                        </InputGroup>
                                         <div class="form-group row">
                                             <label for="profileCountry" class="col-sm-2 col-form-label"><b>Country</b></label>
                                             <select id="countrySelect" name="country" type="text" disabled="true" class="col-sm-10 form-control" id=" profileCountry" value="To fix!">
