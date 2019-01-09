@@ -16,6 +16,12 @@ class Organizations extends Component {
             }]
         }
         this.loadAddNewOrgModal = this.loadAddNewOrgModal.bind(this);
+        this.handlerModal = this.handlerModal.bind(this)
+    }
+
+    handlerModal(orgsModal) {
+        console.log("Added org", orgsModal)
+        this.componentWillMount()
     }
 
     componentWillMount() {
@@ -50,7 +56,7 @@ class Organizations extends Component {
                             data={this.state.orgs}
                             columns={this.state.columns} />
                     </div>
-                    <ModalAddNewOrg show={this.state.modalAddNewOrgShow} onHide={modalAddNewOrgClose} />
+                    <ModalAddNewOrg handlerModal = {this.handlerModal} show={this.state.modalAddNewOrgShow} onHide={modalAddNewOrgClose} />
                 </div>
             )
         } else {

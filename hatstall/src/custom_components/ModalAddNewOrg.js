@@ -14,7 +14,6 @@ class ModalAddOrg extends React.Component {
         let self = this
         event.preventDefault();
         const data = new FormData(event.target);
-        console.log("HEREEE", data)
         this.props.onHide()
 
         fetch('http://localhost:8000/identities/hatstall/organizations?format=json&username=admin&password=admin', {
@@ -25,8 +24,7 @@ class ModalAddOrg extends React.Component {
             return response.json()
         })
             .then((orgs) => {
-                console.log(self)
-                self.setState({ orgs: orgs })
+                this.props.handlerModal(data)
             })
     }
 
