@@ -7,7 +7,7 @@
 4 verbose stack Error: ENOENT: no such file or directory, open '/home/dmoreno/devel/hatstallworkspace/Hatstall-React/package.json'
 4 verbose stack     at Error (native)
 5 verbose cwd /home/dmoreno/devel/hatstallworkspace/Hatstall-React
-6 error Linux 4.15.0-42-generic
+6 error Linux 4.15.0-43-generic
 7 error argv "/home/dmoreno/.nvm/versions/node/v6.11.5/bin/node" "/home/dmoreno/.nvm/versions/node/v6.11.5/bin/npm" "start"
 8 error node v6.11.5
 9 error npm  v3.10.10

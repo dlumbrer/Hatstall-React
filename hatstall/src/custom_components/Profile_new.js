@@ -156,7 +156,7 @@ class Profile extends Component {
                         </Form>
                         <footer className="Profile-footer"></footer>
                     </div>
-                    <div className="Organizations">
+                    <div className="OrganizationsIdentity">
                         <h3>Enrollments <Button id="addIdentitiesBtn" type="button" bsStyle="primary" style={{ float: "right", marginBottom: "10px" }} onClick={this.loadOrgsModal}>Add</Button></h3>
                         <Table striped bordered condensed hover>
                             <thead>

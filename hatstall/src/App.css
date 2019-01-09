@@ -51,9 +51,13 @@
   padding: 40px;
 }
 
-.Organizations, .ProfileIdentities {
+.OrganizationsIdentity, .ProfileIdentities {
   text-align: left;
   width: 1000px;
   margin: 0 auto;
   padding: 5px;
+}
+
+.Orgstablecontainer {
+  padding: 0
 }
