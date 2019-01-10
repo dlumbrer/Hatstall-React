@@ -73,8 +73,6 @@ class ProfilesList extends Component {
     }
 
     render() {
-
-
         if (this.state.identities.length > 0) {
             const selectRow = {
                 mode: 'checkbox',
@@ -91,16 +89,18 @@ class ProfilesList extends Component {
                         </div>
                     </div>
 
+
+                    <BootstrapTable
+                        striped
+                        keyField='profile.name'
+                        pagination={paginationFactory()}
+                        data={this.state.identities}
+                        columns={this.state.columns}
+                        selectRow={selectRow} />
                     <Form action="merge_profiles" method="POST" onSubmit={this.handleSubmit}>
-                        <BootstrapTable
-                            striped
-                            keyField='profile.name'
-                            pagination={paginationFactory()}
-                            data={this.state.identities}
-                            columns={this.state.columns}
-                            selectRow={selectRow} />
+                        <Button style={{ marginBottom: "10px" }} type="submit" bsStyle="success">Merge selected</Button>
                     </Form>
-                    <Button style={{ marginBottom: "10px" }} type="submit" bsStyle="success">Merge selected</Button>
+
                 </Col>
             )
         } else {
