@@ -3,7 +3,12 @@ import { Form, FormGroup, Col, FormControl, ControlLabel, Button, Table, Row } f
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ModalAddNewOrg from './ModalAddNewOrg';
+import gql from "graphql-tag";
+import ApolloClient from "apollo-boost";
 
+const client = new ApolloClient({
+    uri: "http://127.0.0.1:8000/graphql/"
+});
 
 class Organizations extends Component {
     constructor(props) {
@@ -25,14 +30,17 @@ class Organizations extends Component {
     }
 
     componentWillMount() {
-        fetch('http://localhost:8000/identities/hatstall/organizations?username=admin&password=admin&format=json')
-            .then((response) => {
-                console.log(response)
-                return response.json()
+        client
+            .query({
+                query: gql`
+                {
+                    organizations {
+                      name
+                    }
+                }
+                 `
             })
-            .then((orgs) => {
-                this.setState({ orgs: orgs })
-            })
+            .then(result => this.setState({ orgs: result.data.organizations }));
     }
 
     loadAddNewOrgModal() {
@@ -56,7 +64,7 @@ class Organizations extends Component {
                             data={this.state.orgs}
                             columns={this.state.columns} />
                     </div>
-                    <ModalAddNewOrg handlerModal = {this.handlerModal} show={this.state.modalAddNewOrgShow} onHide={modalAddNewOrgClose} />
+                    <ModalAddNewOrg handlerModal={this.handlerModal} show={this.state.modalAddNewOrgShow} onHide={modalAddNewOrgClose} />
                 </div>
             )
         } else {
