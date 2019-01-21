@@ -10,7 +10,12 @@ import { Main } from './custom_components/Main'
 import Organizations from './custom_components/Organizations'
 import { About } from './custom_components/About'
 import Profile from './custom_components/Profile_new'
+import ApolloClient from "apollo-boost"
+import { ApolloProvider } from 'react-apollo';
 
+const client = new ApolloClient({
+  uri: "http://127.0.0.1:8000/graphql/"
+});
 
 class App extends Component {
   render() {
@@ -35,14 +40,17 @@ class App extends Component {
                 </NavItem>
             </Nav>
           </Navbar>
+          <ApolloProvider client={client}>
 
-          <Route exact path="/profiles" component={SearchProfiles} />
-          <Route path="/profile/:profileId" component={Profile} />
-          <Route path="/organizations" component={Organizations} />
-          <Route exact path="/" component={Main} />
-          <Route path="/about" component={About} />
+            <Route exact path="/profiles" component={SearchProfiles}/>
+            <Route path="/profile/:profileId" component={Profile} />
+            <Route path="/organizations" component={Organizations} client={client}/>
+            <Route exact path="/" component={Main} />
+            <Route path="/about" component={About} />
+          </ApolloProvider>
         </div>
       </BrowserRouter >
+
     );
   }
 }
