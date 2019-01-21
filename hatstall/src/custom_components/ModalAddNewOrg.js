@@ -2,34 +2,31 @@ import React, { Component } from 'react';
 import {
     Modal, Button, Table, Form, FormGroup, Col, FormControl, ControlLabel, Row
 } from 'react-bootstrap';
+import gql from "graphql-tag";
+import { Mutation } from "react-apollo";
+
+
 
 class ModalAddOrg extends React.Component {
     constructor(props) {
         super(props)
         this.state = {}
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleSubmit(event) {
-        let self = this
-        event.preventDefault();
-        const data = new FormData(event.target);
-        this.props.onHide()
-
-        fetch('http://localhost:8000/identities/hatstall/organizations?format=json&username=admin&password=admin', {
-            method: 'POST',
-            body: data,
-        }).then((response) => {
-            console.log(response)
-            return response.json()
-        })
-            .then((orgs) => {
-                this.props.handlerModal(data)
-            })
     }
 
     render() {
+        let nameOrg;
+        const ADD_ORG = gql`
+        mutation addOrg($name: String!) {
+            addOrganization(name: $name) {
+                organization {
+                    name
+                }
+            }
+        }
+        `;
+
         return (
+
             <Modal
                 {...this.props}
                 bsSize="large"
@@ -39,30 +36,44 @@ class ModalAddOrg extends React.Component {
                     <Modal.Title id="contained-modal-title-lg">Add New Organization</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form horizontal id="addOrg" onSubmit={this.handleSubmit}>
-                        <FormGroup controlId="formHorizontalOrgName">
-                            <Col componentClass={ControlLabel} sm={1}>
-                                Name:
-                            </Col>
-                            <Col sm={10}>
-                                <FormControl type="name" name="name" placeholder="Organization name" />
-                            </Col>
-                        </FormGroup>
-                        <FormGroup controlId="formHorizontalOrgDomain">
-                            <Col componentClass={ControlLabel} sm={1}>
-                                Domain:
-                            </Col>
-                            <Col sm={10}>
-                                <FormControl type="name" name="domain" placeholder="Organization domain" />
-                            </Col>
-                        </FormGroup>
-                        <FormGroup>
-                            <Col smOffset={1} sm={11}>
-                                <Button type="submit" bsStyle="success">Add</Button>
-                                <Button style={{ marginLeft: "10px" }} onClick={this.props.onHide}>Close</Button>
-                            </Col>
-                        </FormGroup>
-                    </Form>
+                    <Mutation mutation={ADD_ORG}>
+                        {(addOrganization, { data }) => (
+                            <Form horizontal id="addOrg" onSubmit={e => {
+                                e.preventDefault();
+                                let orgs = addOrganization({ variables: { name: nameOrg.value } }).then(function(result){
+                                    console.log(result)
+                                });
+                                nameOrg.value = "";
+                                this.props.onHide()
+                                this.props.handlerModal(nameOrg)
+                            }}>
+                                <FormGroup controlId="formHorizontalOrgName">
+                                    <Col componentClass={ControlLabel} sm={1}>
+                                        Name:
+                                    </Col>
+                                    <Col sm={10}>
+                                        <FormControl type="name" name="name" placeholder="Organization name" inputRef={node => {
+                                            nameOrg = node;
+                                        }} />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup controlId="formHorizontalOrgDomain">
+                                    <Col componentClass={ControlLabel} sm={1}>
+                                        Domain:
+                                    </Col>
+                                    <Col sm={10}>
+                                        <FormControl type="name" name="domain" placeholder="Organization domain" />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Col smOffset={1} sm={11}>
+                                        <Button type="submit" bsStyle="success">Add</Button>
+                                        <Button style={{ marginLeft: "10px" }} onClick={this.props.onHide}>Close</Button>
+                                    </Col>
+                                </FormGroup>
+                            </Form>
+                        )}
+                    </Mutation>
                 </Modal.Body>
             </Modal>
         )
