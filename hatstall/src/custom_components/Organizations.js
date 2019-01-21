@@ -18,10 +18,26 @@ class Organizations extends Component {
             columns: [{
                 dataField: 'name',
                 text: 'Name'
+            },
+            {
+                dataField: 'domains',
+                text: 'Domains',
+                formatter: listDomains,
             }]
         }
         this.loadAddNewOrgModal = this.loadAddNewOrgModal.bind(this);
         this.handlerModal = this.handlerModal.bind(this)
+
+        function listDomains(cell, row) {
+            console.log(cell)
+            return (
+                <span>
+                    {cell.map(domain =>
+                        domain.domain + ", "
+                    )}
+                </span>
+            );
+        }
     }
 
     handlerModal(orgsModal) {
@@ -36,6 +52,9 @@ class Organizations extends Component {
                 {
                     organizations {
                       name
+                      domains {
+                        domain
+                      }
                     }
                 }
                  `
