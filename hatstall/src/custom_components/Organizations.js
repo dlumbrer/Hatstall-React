@@ -4,12 +4,14 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ModalAddNewOrg from './ModalAddNewOrg';
 import ModalAddNewDomain from './ModalAddNewDomain';
+import ModalDeleteDomain from './ModalDeleteDomain';
 import gql from "graphql-tag";
 import { Query } from 'react-apollo';
 
 class Organizations extends Component {
     constructor(props) {
         super(props)
+        const here = this
         this.state = {
             orgs: [],
             columns: [{
@@ -26,15 +28,20 @@ class Organizations extends Component {
         this.loadAddNewDomainModal = this.loadAddNewDomainModal.bind(this);
         this.handlerModal = this.handlerModal.bind(this)
         this.handlerDomainModal = this.handlerDomainModal.bind(this)
+        this.handlerDeleteDomainModal = this.handlerDeleteDomainModal.bind(this)
 
         function listDomains(cell, row) {
             return (
-                <span>
+                <p>
                     {cell.map(domain =>
-                        domain.domain + ", "
+                        <span>{domain.domain} ( <a href="#" onClick={() => loadDeleteDomainModal(domain.domain)}><i class="fa fa-trash"></i></a> ), </span>
                     )}
-                </span>
+                </p>
             );
+        }
+
+        function loadDeleteDomainModal(domain) {
+            here.setState({ modalDeleteDomainShow: true, domainToDelete: domain })
         }
     }
 
@@ -46,6 +53,10 @@ class Organizations extends Component {
         this.state.refetch()
     }
 
+    handlerDeleteDomainModal(deleteDomainModal) {
+        this.state.refetch()
+    }
+
     loadAddNewOrgModal() {
         this.setState({ modalAddNewOrgShow: true })
     }
@@ -54,10 +65,10 @@ class Organizations extends Component {
         this.setState({ modalAddNewDomainShow: true })
     }
 
-
     render() {
         let modalAddNewOrgClose = () => this.setState({ modalAddNewOrgShow: false });
         let modalAddNewDomainClose = () => this.setState({ modalAddNewDomainShow: false });
+        let modalDeleteDomainClose = () => this.setState({ modalDeleteDomainShow: false });
         const GET_ORGS = gql`
         {
             organizations {
@@ -90,6 +101,7 @@ class Organizations extends Component {
                             </div>
                             <ModalAddNewOrg handlerModal={this.handlerModal} show={this.state.modalAddNewOrgShow} onHide={modalAddNewOrgClose} />
                             <ModalAddNewDomain handlerDomainModal={this.handlerDomainModal} show={this.state.modalAddNewDomainShow} onHide={modalAddNewDomainClose} />
+                            <ModalDeleteDomain handlerDeleteDomainModal={this.handlerDeleteDomainModal} domainToDelete={this.state.domainToDelete} show={this.state.modalDeleteDomainShow} onHide={modalDeleteDomainClose} />
                         </div>
                     )
                 }}
