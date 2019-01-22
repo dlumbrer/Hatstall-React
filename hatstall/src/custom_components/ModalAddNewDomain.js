@@ -58,15 +58,16 @@ class ModalAddNewDomain extends React.Component {
                     <Mutation mutation={ADD_DOM}>
                         {(addDomain, { data }) => (
                             <Form horizontal id="addDomain" onSubmit={e => {
+                                const here = this
                                 e.preventDefault();
                                 let domain = addDomain({ variables: { domain: domainStr.value, isTopDomain: isTopDomainCheck.value, organization: orgName.value } }).then(function (result) {
                                     console.log(result)
+                                    here.props.handlerDomainModal(domainStr)
                                 });
                                 domainStr.value = "";
                                 isTopDomainCheck.value = "false";
                                 orgName.value = "";
                                 this.props.onHide()
-                                this.props.handlerDomainModal(domainStr)
                             }}>
                                 <FormGroup controlId="formHorizontalDomainName">
                                     <Col componentClass={ControlLabel} sm={2}>

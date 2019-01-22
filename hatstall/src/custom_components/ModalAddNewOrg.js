@@ -39,13 +39,14 @@ class ModalAddOrg extends React.Component {
                     <Mutation mutation={ADD_ORG}>
                         {(addOrganization, { data }) => (
                             <Form horizontal id="addOrg" onSubmit={e => {
+                                const here = this
                                 e.preventDefault();
                                 let orgs = addOrganization({ variables: { name: nameOrg.value } }).then(function(result){
                                     console.log(result)
+                                    here.props.handlerModal(nameOrg)
                                 });
                                 nameOrg.value = "";
                                 this.props.onHide()
-                                this.props.handlerModal(nameOrg)
                             }}>
                                 <FormGroup controlId="formHorizontalOrgName">
                                     <Col componentClass={ControlLabel} sm={1}>
