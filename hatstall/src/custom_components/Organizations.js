@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ModalAddNewOrg from './ModalAddNewOrg';
+import ModalAddNewDomain from './ModalAddNewDomain';
 import gql from "graphql-tag";
 import { Query } from 'react-apollo';
 
@@ -22,7 +23,9 @@ class Organizations extends Component {
             }]
         }
         this.loadAddNewOrgModal = this.loadAddNewOrgModal.bind(this);
+        this.loadAddNewDomainModal = this.loadAddNewDomainModal.bind(this);
         this.handlerModal = this.handlerModal.bind(this)
+        this.handlerDomainModal = this.handlerDomainModal.bind(this)
 
         function listDomains(cell, row) {
             return (
@@ -39,13 +42,22 @@ class Organizations extends Component {
         this.state.refetch()
     }
 
+    handlerDomainModal(domainModal) {
+        this.state.refetch()
+    }
+
     loadAddNewOrgModal() {
         this.setState({ modalAddNewOrgShow: true })
+    }
+
+    loadAddNewDomainModal() {
+        this.setState({ modalAddNewDomainShow: true })
     }
 
 
     render() {
         let modalAddNewOrgClose = () => this.setState({ modalAddNewOrgShow: false });
+        let modalAddNewDomainClose = () => this.setState({ modalAddNewDomainShow: false });
         const GET_ORGS = gql`
         {
             organizations {
@@ -65,7 +77,7 @@ class Organizations extends Component {
                     if (error) return <h3 className="text-center">Error :(</h3>;
                     return (
                         <div className="OrganizationsIdentity">
-                            <h1>Organizations <Button id="addIdentitiesBtn" type="button" bsStyle="success" style={{ float: "right", marginBottom: "10px" }} onClick={this.loadAddNewOrgModal}>Add Organization</Button><Button id="addIdentitiesBtn" type="button" bsStyle="success" style={{ float: "right", marginBottom: "10px", marginRight: "10px" }} onClick={this.loadAddNewOrgModal}>Add Domain</Button></h1>
+                            <h1>Organizations <Button id="addIdentitiesBtn" type="button" bsStyle="success" style={{ float: "right", marginBottom: "10px" }} onClick={this.loadAddNewOrgModal}>Add Organization</Button><Button id="addIdentitiesBtn" type="button" bsStyle="success" style={{ float: "right", marginBottom: "10px", marginRight: "10px" }} onClick={this.loadAddNewDomainModal}>Add Domain</Button></h1>
                             <br></br>
                             <div className="Orgstablecontainer">
                                 <BootstrapTable
@@ -77,6 +89,7 @@ class Organizations extends Component {
                                     columns={this.state.columns} />
                             </div>
                             <ModalAddNewOrg handlerModal={this.handlerModal} show={this.state.modalAddNewOrgShow} onHide={modalAddNewOrgClose} />
+                            <ModalAddNewDomain handlerDomainModal={this.handlerDomainModal} show={this.state.modalAddNewDomainShow} onHide={modalAddNewDomainClose} />
                         </div>
                     )
                 }}

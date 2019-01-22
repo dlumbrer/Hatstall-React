@@ -57,14 +57,6 @@ class ModalAddOrg extends React.Component {
                                         }} />
                                     </Col>
                                 </FormGroup>
-                                <FormGroup controlId="formHorizontalOrgDomain">
-                                    <Col componentClass={ControlLabel} sm={1}>
-                                        Domain:
-                                    </Col>
-                                    <Col sm={10}>
-                                        <FormControl type="name" name="domain" placeholder="Organization domain" />
-                                    </Col>
-                                </FormGroup>
                                 <FormGroup>
                                     <Col smOffset={1} sm={11}>
                                         <Button type="submit" bsStyle="success">Add</Button>
