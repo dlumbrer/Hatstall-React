@@ -3,6 +3,8 @@ import { Col } from 'react-bootstrap';
 import { FormControl, Form, Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import gql from "graphql-tag";
+import { Query } from 'react-apollo';
 
 
 class ProfilesList extends Component {
@@ -24,11 +26,11 @@ class ProfilesList extends Component {
                 text: 'Enrollments'
             },
             {
-                dataField: 'profile.is_bot',
+                dataField: 'profile.isBot',
                 text: 'Bot?'
             },
             {
-                dataField: 'profile.country',
+                dataField: 'profile.country.name',
                 text: 'Country'
             },
             {
@@ -44,7 +46,7 @@ class ProfilesList extends Component {
         function linkToProfile(cell, row) {
             return (
                 <span>
-                    <a href={'/profile/' + cell.uuid}>{cell.name}</a>
+                    <a href={'/profile/' + row.uuid}>{cell.name}</a>
                 </span>
             );
         }
@@ -52,7 +54,7 @@ class ProfilesList extends Component {
     }
 
 
-    componentWillMount(toSearch) {
+    /*componentWillMount(toSearch) {
         let shsearch = this.props.shsearch
         if (toSearch) {
             shsearch = toSearch
@@ -65,47 +67,72 @@ class ProfilesList extends Component {
             .then((identities) => {
                 this.setState({ identities: identities })
             })
-    }
+    }*/
 
     searchIdentities = () => {
         this.setState({ identities: [] })
-        this.componentWillMount(document.getElementById("shsearch_table").value)
+        //this.componentWillMount(document.getElementById("shsearch_table").value)
+        this.state.refetch()
     }
 
     render() {
-        if (this.state.identities.length > 0) {
-            const selectRow = {
-                mode: 'checkbox',
-            };
-            return (
-                <Col sm={12}>
-                    <h1>Profiles</h1>
-                    <div style={{ float: "right", marginBottom: "4px" }}>
-                        <div class="input-group">
-                            <FormControl class="form-control" id="shsearch_table" style={{ width: "20%", float: "right" }} name="shsearch" placeholder="Search identities..."></FormControl>
-                            <span class="input-group-btn">
-                                <button class="btn btn-info" onClick={this.searchIdentities}>Go!</button>
-                            </span>
-                        </div>
-                    </div>
+        const GET_UIDS = gql`
+        {
+            uidentities {
+              uuid
+              profile {
+                id
+                name
+                email
+                country {
+                    name
+                }
+                isBot
+              }
+              identities{
+                name
+                email
+                username
+              }
+            }
+          }
+        `
+        return (
+            <Query query={GET_UIDS}>
+                {({ loading, error, data, refetch }) => {
+                    this.state.refetch = refetch
+                    if (loading) return <h3 className="text-center">Loading organizations...</h3>;
+                    if (error) return <h3 className="text-center">Error :(</h3>;
+                    return (
+                        <Col sm={12}>
+                            <h1>Unique Identities</h1>
+                            <div style={{ float: "right", marginBottom: "4px" }}>
+                                <div class="input-group">
+                                    <FormControl class="form-control" id="shsearch_table" style={{ width: "20%", float: "right" }} name="shsearch" placeholder="Search identities..."></FormControl>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info" onClick={this.searchIdentities}>Go!</button>
+                                    </span>
+                                </div>
+                            </div>
 
 
-                    <BootstrapTable
-                        striped
-                        keyField='profile.name'
-                        pagination={paginationFactory()}
-                        data={this.state.identities}
-                        columns={this.state.columns}
-                        selectRow={selectRow} />
-                    <Form action="merge_profiles" method="POST" onSubmit={this.handleSubmit}>
-                        <Button style={{ marginBottom: "10px" }} type="submit" bsStyle="success">Merge selected</Button>
-                    </Form>
+                            <BootstrapTable
+                                striped
+                                keyField='profile.name'
+                                pagination={paginationFactory()}
+                                data={data.uidentities}
+                                columns={this.state.columns}
+                            //selectRow={selectRow} 
+                            />
+                            <Form action="merge_profiles" method="POST" onSubmit={this.handleSubmit}>
+                                <Button style={{ marginBottom: "10px" }} type="submit" bsStyle="success">Merge selected</Button>
+                            </Form>
 
-                </Col>
-            )
-        } else {
-            return <h3 className="text-center">Loading identities...</h3>
-        }
+                        </Col>
+                    )
+                }}
+            </Query>
+        )
     }
 }
 
