@@ -5,7 +5,7 @@ import {
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 
-class ModalAddOrg extends React.Component {
+class ModalEnrollOrg extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -77,4 +77,4 @@ class ModalAddOrg extends React.Component {
     }
 }
 
-export default ModalAddOrg;
+export default ModalEnrollOrg;

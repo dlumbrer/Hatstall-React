@@ -22,8 +22,9 @@ class ProfilesList extends Component {
                 text: 'Email'
             },
             {
-                dataField: 'profile.enrollment',
-                text: 'Enrollments'
+                dataField: 'enrollments',
+                text: 'Enrollments',
+                formatter: listEnrollments
             },
             {
                 dataField: 'profile.isBot',
@@ -35,7 +36,7 @@ class ProfilesList extends Component {
             },
             {
                 dataField: 'last_modified',
-                text: 'Las Modified'
+                text: 'Last Modified'
             },
             {
                 dataField: 'identities.length',
@@ -47,6 +48,16 @@ class ProfilesList extends Component {
             return (
                 <span>
                     <a href={'/profile/' + row.uuid}>{cell.name}</a>
+                </span>
+            );
+        }
+
+        function listEnrollments(cell, row) {
+            return (
+                <span>
+                    {cell.map(enrollment =>
+                        <span>{enrollment.organization.name}, </span>
+                    )}
                 </span>
             );
         }
@@ -94,6 +105,11 @@ class ProfilesList extends Component {
                 email
                 username
               }
+              enrollments {
+                organization {
+                  name
+                }
+              }
             }
           }
         `
@@ -101,7 +117,7 @@ class ProfilesList extends Component {
             <Query query={GET_UIDS}>
                 {({ loading, error, data, refetch }) => {
                     this.state.refetch = refetch
-                    if (loading) return <h3 className="text-center">Loading organizations...</h3>;
+                    if (loading) return <h3 className="text-center">Loading profiles...</h3>;
                     if (error) return <h3 className="text-center">Error :(</h3>;
                     return (
                         <Col sm={12}>
