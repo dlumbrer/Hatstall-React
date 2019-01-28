@@ -56,8 +56,8 @@ class Profile extends Component {
         let modalOrgClose = () => this.setState({ modalOrgShow: false });
         let modalIdentitiesClose = () => this.setState({ modalIdentitiesShow: false });
         const GET_PROFILE = gql`
-        query getProfile($profileId: String!) {
-            uidentities(uuid: $profileId) {
+        query getProfile($profileId: IdentityFilterType!) {
+            uidentities(filters: $profileId) {
               uuid
               profile {
                 id
@@ -84,7 +84,7 @@ class Profile extends Component {
           }
         `
         return (
-            <Query query={GET_PROFILE}  variables={{ profileId: this.props.match.params.profileId}}>
+            <Query query={GET_PROFILE}  variables={{ profileId: { "uuid": this.props.match.params.profileId} }}>
                 {({ loading, error, data, refetch }) => {
                     this.state.refetch = refetch
                     if (loading) return <h3 className="text-center">Loading profile...</h3>;
